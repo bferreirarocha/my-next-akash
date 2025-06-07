@@ -1,0 +1,6 @@
+SOCKSPort 9050
+Log notice stdout
+
+# Cambia IP ogni 5 minuti
+MaxCircuitDirtiness 300
+NewCircuitPeriod 120

@@ -1,21 +1,21 @@
-# Use Node.js base image
-FROM node:18-alpine
+FROM node:20
 
-# Set working directory
+# Installa Tor
+RUN apt-get update && \
+    apt-get install -y tor && \
+    apt-get clean
+
 WORKDIR /app
-
-# Install dependencies
-COPY package*.json ./
-RUN npm install
-
-# Copy the rest of the code
 COPY . .
 
-# Build the Next.js app
+# Installa dipendenze e builda
+RUN npm install
 RUN npm run build
 
-# Expose Next.js port
-EXPOSE 3000
+# Copia configurazione Tor e script
+COPY torrc /etc/tor/torrc
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# Start the app
-CMD ["npm", "start"]
+EXPOSE 3000
+CMD ["/entrypoint.sh"]
