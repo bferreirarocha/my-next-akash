@@ -1,0 +1,36 @@
+version: "2"
+
+services:
+  web:
+    image: bferreirarocha/nextjs-akash-public
+    expose:
+      - port: 3000
+        as: 80
+        to:
+          - global: true
+
+profiles:
+  compute:
+    web:
+      resources:
+        cpu:
+          units: 1
+        memory:
+          size: 512Mi
+        storage:
+          size: 1Gi
+
+  placement:
+    dcloud:
+      attributes:
+        host: akash
+      pricing:
+        web:
+          denom: uakt
+          amount: 100
+
+deployment:
+  web:
+    dcloud:
+      profile: web
+      count: 1
